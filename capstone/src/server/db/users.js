@@ -50,8 +50,58 @@ const getUserByEmail = async(email) => {
     }
 }
 
+const getAllUsers = async () => {
+    try {
+        const { rows } = await db.query(`SELECT * FROM users`)
+
+        return rows
+
+    } catch (err) {
+        throw err
+    }
+}
+
+const deleteUser = async (id) => {
+    try {
+        const { rows: [user]} = await db.query(`
+            DELETE FROM users
+            WHERE id = $1
+            RETURNING * ;
+            `, [id])
+
+        return user
+    } catch (err) {
+        throw err
+    }
+}
+
+const editUser = async (id, fields={}) => {
+
+    const setString = Object.keys(fields).map((key, index) => `"${key}"=$${index + 1}`).join(', ');
+    if (setString.length === 0) {
+        return;
+    }
+
+    try {
+
+        const { rows: [user]} = await db.query(`
+        UPDATE users
+            SET ${setString}
+            WHERE id=${id}
+            RETURNING *;
+        `, Object.values(fields));
+        return user;
+
+    } catch (err){
+        throw err
+    }
+}
+
 module.exports = {
     createUser,
     getUser,
-    getUserByEmail
+    getUserByEmail,
+    getAllUsers,
+    deleteUser,
+    editUser
 };

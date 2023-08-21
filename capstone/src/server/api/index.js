@@ -32,6 +32,9 @@ apiRouter.use(async (req, res, next) => {
   }
 });
 
+const itemsRouter = require('./items');
+apiRouter.use('/items', itemsRouter);
+
 const usersRouter = require('./users');
 apiRouter.use('/users', usersRouter);
 
