@@ -94,7 +94,7 @@ usersRouter.post('/register', async(req, res, next) => {
     }
 })
 
-usersRouter.delete('/:id', async (req, res, next) => {
+usersRouter.delete('/:id', requireAdmin, async (req, res, next) => {
     try {
         const user = await deleteUser(req.params.id)
 
@@ -107,7 +107,7 @@ usersRouter.delete('/:id', async (req, res, next) => {
     }
 })
 
-usersRouter.put('/:id', async (req, res, next) => {
+usersRouter.put('/:id', requireAdmin, async (req, res, next) => {
     try {
         const user = await editUser(req.params.id, req.body)
 
@@ -119,5 +119,23 @@ usersRouter.put('/:id', async (req, res, next) => {
         throw err
     }
 })
+
+const requireAdmin = (req, res, next) => {
+    try {
+      const token = req.headers.authorization.split(' ')[1];
+      const user = jwt.verify(token, process.env.JWT_SECRET);
+      
+      if (user.isAdmin) {
+        next();
+      } else {
+        next({
+          name: 'UnauthorizedError',
+          message: 'You must be an admin to perform this action'
+        });
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
 
 module.exports = usersRouter;
