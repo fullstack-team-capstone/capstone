@@ -97,6 +97,14 @@ const editUser = async (id, fields={}) => {
     }
 }
 
+const getUserById = async (id) => {
+    try {
+        // DO THIS FIRST!!
+    } catch (error) {
+        throw error
+    }
+}
+
 module.exports = {
     createUser,
     getUser,

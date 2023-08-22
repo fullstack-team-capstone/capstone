@@ -24,10 +24,9 @@ apiRouter.use(async (req, res, next) => {
     const token = auth.slice(prefix.length);
     
     try {
-      const parsedToken = jwt.verify(token, JWT_SECRET);
-      // TODO - Call 'jwt.verify()' to see if the token is valid. If it is, use it to get the user's 'id'. Look up the user with their 'id' and set 'req.user'
-      if (parsedToken) {
-        req.user = await getUserById(id);
+      const { id } = jwt.verify(token, JWT_SECRET); 
+      if (id) {
+        req.user = await getUserById(id); 
         next();
       } else {
         next({
@@ -36,14 +35,9 @@ apiRouter.use(async (req, res, next) => {
         });
       }
     } catch (error) {
+      console.log(error)
       next(error);
     }
-  } 
-  else {
-    next({
-      name: 'AuthorizationHeaderError',
-      message: `Authorization token must start with ${prefix}`
-    });
   }
 });
 

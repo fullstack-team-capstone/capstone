@@ -12,17 +12,6 @@ const {
 
 const jwt = require('jsonwebtoken')
 
-usersRouter.get('/', async( req, res, next) => {
-    try {
-        const users = await getAllUsers();
-
-        res.send({
-            users
-        });
-    } catch ({name, message}) {
-        next({name, message})
-    }
-});
 
 usersRouter.post('/login', async(req, res, next) => {
     const { email, password } = req.body;
@@ -32,6 +21,7 @@ usersRouter.post('/login', async(req, res, next) => {
             message: 'Please supply both an email and password'
         });
     }
+
     try {
         const user = await getUser({email, password});
         if(user) {
@@ -50,11 +40,12 @@ usersRouter.post('/login', async(req, res, next) => {
         else {
             next({
                 name: 'IncorrectCredentialsError',
-                message: 'Username or password is incorrect'
+                message: 'Email or password is incorrect'
             });
         }
-    } catch(err) {
-        next(err);
+    } catch(error) {
+        consloe/log(error)
+        next(error);
     }
 });
 
@@ -94,32 +85,6 @@ usersRouter.post('/register', async(req, res, next) => {
     }
 })
 
-usersRouter.delete('/:id', requireAdmin, async (req, res, next) => {
-    try {
-        const user = await deleteUser(req.params.id)
-
-        res.send({
-            user
-        });
-
-    } catch (err) {
-        throw err
-    }
-})
-
-usersRouter.put('/:id', requireAdmin, async (req, res, next) => {
-    try {
-        const user = await editUser(req.params.id, req.body)
-
-        res.send({
-            user
-        })
-
-    } catch (err) {
-        throw err
-    }
-})
-
 const requireAdmin = (req, res, next) => {
     try {
       const token = req.headers.authorization.split(' ')[1];
@@ -133,9 +98,51 @@ const requireAdmin = (req, res, next) => {
           message: 'You must be an admin to perform this action'
         });
       }
+      res.send({
+        isAdmin
+      })
     } catch (error) {
       next(error);
     }
   }
+
+usersRouter.get('/', requireAdmin, async(req, res, next) => {
+    try {
+        const users = await getAllUsers();
+
+        res.send({
+            users
+        });
+    } catch (err) {
+        next('Only admins may see user list')
+    }
+});
+
+usersRouter.delete('/:id', requireAdmin, async (req, res, next) => {
+    try {
+        const user = await deleteUser(req.params.id)
+
+        res.send({
+            user
+        });
+
+    } catch (err) {
+        console.log(err)
+        next (err);
+    }
+})
+
+usersRouter.put('/:id', requireAdmin, async (req, res, next) => {
+    try {
+        const user = await editUser(req.params.id, req.body)
+
+        res.send({
+            user
+        })
+
+    } catch (err) {
+        throw ('Must be admin to edit user')
+    }
+})
 
 module.exports = usersRouter;
