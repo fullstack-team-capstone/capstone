@@ -1,3 +1,7 @@
 module.exports = {
-    ...require('./users')
+    ...require('./users'),
+    ...require('./reviews'),
+    ...require('./items')
+
 }
+
