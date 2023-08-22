@@ -1,5 +1,5 @@
 module.exports = {
- items
+
 
     ...require('./users'),
     ...require('./reviews'),
@@ -7,4 +7,4 @@ module.exports = {
 
 }
 
-main
+
