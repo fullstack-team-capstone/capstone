@@ -4,7 +4,10 @@ const usersRouter = express.Router();
 const {
     createUser,
     getUser,
-    getUserByEmail
+    getUserByEmail,
+    getAllUsers, 
+    deleteUser,
+    editUser
 } = require('../db');
 
 const jwt = require('jsonwebtoken')
@@ -88,6 +91,32 @@ usersRouter.post('/register', async(req, res, next) => {
         });
     } catch({name, message}) {
         next({name, message})
+    }
+})
+
+usersRouter.delete('/:id', async (req, res, next) => {
+    try {
+        const user = await deleteUser(req.params.id)
+
+        res.send({
+            user
+        });
+
+    } catch (err) {
+        throw err
+    }
+})
+
+usersRouter.put('/:id', async (req, res, next) => {
+    try {
+        const user = await editUser(req.params.id, req.body)
+
+        res.send({
+            user
+        })
+
+    } catch (err) {
+        throw err
     }
 })
 
