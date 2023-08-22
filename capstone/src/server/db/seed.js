@@ -1,6 +1,7 @@
 const db = require('./client');
 const { createUser } = require('./users');
 const { createItem } = require('./items')
+const {createReview} = require('./reviews')
 
 const users = [
   {
@@ -44,10 +45,20 @@ const items = [
     isHighlighted: true,
   },
 ]
+const reviews = [
+  {
+    title: 'Loved this product!',
+    stars: 5,
+    reviewbody:'The product arrived on time! Loved the speedy service!',
+    bottomline: true,
+  }
+
+]
 
 const dropTables = async () => {
     try {
         await db.query(`
+        DROP TABLE IF EXISTS reviews;
         DROP TABLE IF EXISTS items;
         DROP TABLE IF EXISTS users;
         `)
@@ -76,6 +87,19 @@ const createTables = async () => {
           description TEXT NOT NULL,
           isHighlighted BOOLEAN DEFAULT false
         );
+
+        CREATE TABLE reviews(
+          reviewid SERIAL PRIMARY KEY,
+          userid INTEGER REFERENCES users(id),
+          reviewableid INTEGER REFERENCES items(id),
+          title VARCHAR(255) NOT NULL,
+          stars INTEGER NOT NULL,
+          reviewbody TEXT NOT NULL,
+          bottomline BOOLEAN DEFAULT false
+
+        );
+
+
         `)
     }
     catch(err) {
@@ -105,6 +129,17 @@ const insertItems = async () => {
   }
 };
 
+const insertReviews = async () => {
+  try {
+    for (const review of reviews) {
+      await createReview({title: review.title, stars: review.stars, reviewbody: review.reviewbody, bottomline: review.bottomline || false});
+    }
+    console.log('Seed data inserted successfully.');
+  } catch (error) {
+    console.error('Error inserting seed data:', error);
+  }
+};
+
 const seedDatabse = async () => {
     try {
         db.connect();
@@ -112,7 +147,8 @@ const seedDatabse = async () => {
         await createTables();
         await insertUsers();
         await insertItems();
-      
+        await insertReviews();
+
     }
     catch (err) {
         throw err;

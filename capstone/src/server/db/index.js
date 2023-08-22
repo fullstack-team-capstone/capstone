@@ -1,4 +1,10 @@
 module.exports = {
-    ...require('./items'),
-    ...require('./users')
+ items
+
+    ...require('./users'),
+    ...require('./reviews'),
+    ...require('./items')
+
 }
+
+main

@@ -1,3 +1,5 @@
+// server/api/index.js
+
 const express = require('express');
 const apiRouter = express.Router();
 const jwt = require('jsonwebtoken');
@@ -38,8 +40,16 @@ apiRouter.use('/items', itemsRouter);
 const usersRouter = require('./users');
 apiRouter.use('/users', usersRouter);
 
+const itemsRouter = require('./items');
+apiRouter.use('/items', itemsRouter);
+
+const reviewsRouter = require('./reviews');
+apiRouter.use('/reviews', reviewsRouter);
+
 apiRouter.use((err, req, res, next) => {
     res.status(500).send(err)
+  
+
   })
 
 module.exports = apiRouter;
