@@ -4,6 +4,7 @@ const db = require('./client');
 const { createUser } = require('./users');
 const { createItem } = require('./items')
 const {createReview} = require('./reviews')
+const {createComment} = require('./comments')
 
 const users = [
   {
@@ -57,13 +58,25 @@ const reviews = [
 
 ]
 
+const comments = [
+  {
+    thumbsUpOrDown: true,
+    title: 'Great Review',
+    commentBody:'I got the same product and it performed just as you mentioned!'
+  }
+
+]
+
+
 const dropTables = async () => {
     try {
         await db.query(`
+        DROP TABLE IF EXISTS comments;
         DROP TABLE IF EXISTS reviews;
         DROP TABLE IF EXISTS items;
         DROP TABLE IF EXISTS users;
         `)
+
     }
     catch(err) {
         throw err;
@@ -100,6 +113,18 @@ const createTables = async () => {
           bottomline BOOLEAN DEFAULT false
         );
         
+
+        CREATE TABLE comments(
+          commentid SERIAL PRIMARY KEY,
+          userid INTEGER REFERENCES users(id),
+          reviewid INTEGER REFERENCES reviews(reviewid),
+          thumbsUpOrDown BOOLEAN DEFAULT true, 
+          title VARCHAR(255) NOT NULL,
+          commentBody TEXT NOT NULL
+          
+
+
+        );
 
 
         `)
@@ -142,6 +167,17 @@ const insertReviews = async () => {
   }
 };
 
+const insertComments = async () => {
+  try {
+    for (const comment of comments) {
+      await createComment({thumbsUpOrDown: comment.thumbsUpOrDown || false, title: comment.title, commentBody: comment.commentBody});
+    }
+    console.log('Seed data inserted successfully.');
+  } catch (error) {
+    console.error('Error inserting seed data:', error);
+  }
+};
+
 const seedDatabse = async () => {
     try {
         db.connect();
@@ -150,6 +186,7 @@ const seedDatabse = async () => {
         await insertUsers();
         await insertItems();
         await insertReviews();
+        await insertComments();
 
     }
     catch (err) {
