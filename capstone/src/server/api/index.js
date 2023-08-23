@@ -3,14 +3,14 @@
 const express = require('express');
 const apiRouter = express.Router();
 const jwt = require('jsonwebtoken');
-const { getUserById } = require('../db');
+const { getUserById } = require('../db/users');
 const volleyball = require('volleyball');
 apiRouter.use(volleyball);
 
-// Logging middleware to print Authorization header
+
 apiRouter.use((req, res, next) => {
   const authHeader = req.header('Authorization');
-  console.log("Authorization Header:", authHeader); // Log the full Authorization header
+  console.log("Authorization Header:", authHeader); 
   next();
 });
 
@@ -22,8 +22,8 @@ apiRouter.use(async (req, res, next) => {
   } else if (auth.startsWith(prefix)) {
     const token = auth.slice(prefix.length);
 
-    // Logging the token and JWT secret for debugging
-    console.log("Extracted Token:", token); // Log the extracted token without the Bearer prefix
+    
+    console.log("Extracted Token:", token); 
     console.log("JWT_SECRET:", process.env.JWT_SECRET);
 
     try {

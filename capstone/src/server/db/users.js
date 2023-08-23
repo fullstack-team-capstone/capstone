@@ -8,7 +8,7 @@ const createUser = async({ username, email, password, isAdmin }) => {
     const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
     try {
         const { rows: [user ] } = await db.query(`
-        INSERT INTO users(username, email, password, isAdmin)
+        INSERT INTO users(username, email, password, "isAdmin") 
         VALUES($1, $2, $3, $4)
         ON CONFLICT (email) DO NOTHING
         RETURNING *`, [username, email, hashedPassword, isAdmin]);
@@ -18,6 +18,7 @@ const createUser = async({ username, email, password, isAdmin }) => {
         throw err;
     }
 }
+
 
 const getUser = async({email, password}) => {
     if(!email || !password) {
@@ -117,3 +118,4 @@ const getUserById = async (id) => {
     editUser,
     getUserById 
   };
+

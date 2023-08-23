@@ -6,6 +6,7 @@ const {
     createUser,
     getUser,
     getUserByEmail,
+    getUserById,
     getAllUsers, 
     deleteUser,
     editUser
@@ -32,8 +33,9 @@ usersRouter.post('/login', async(req, res, next) => {
         if (user) {
             const token = jwt.sign({
                 id: user.id,
-                email
-            }, process.env.JWT_SECRET, {
+                email,
+                isAdmin: user.isAdmin
+              }, process.env.JWT_SECRET, {
                 expiresIn: '1w'
             });
             res.send({
@@ -47,7 +49,7 @@ usersRouter.post('/login', async(req, res, next) => {
             });
         }
     } catch (error) {
-        console.log(error); // Fixed typo
+        console.log(error); 
         next(error);
     }
 });
@@ -56,7 +58,7 @@ usersRouter.post('/login', async(req, res, next) => {
 usersRouter.post('/register', async(req, res, next) => {
     const { username, email, password } = req.body;
 
-    // Check for the JWT secret
+   
     if (!process.env.JWT_SECRET) {
         next({
             name: 'MissingSecretError',
@@ -84,8 +86,9 @@ usersRouter.post('/register', async(req, res, next) => {
 
         const token = jwt.sign({
             id: user.id,
-            email
-        }, process.env.JWT_SECRET, {
+            email,
+            isAdmin: user.isAdmin
+          }, process.env.JWT_SECRET, {
             expiresIn: '1w'
         });
 
@@ -98,23 +101,27 @@ usersRouter.post('/register', async(req, res, next) => {
     }
 })
 
-const requireAdmin = (req, res, next) => {
+const requireAdmin = async (req, res, next) => {
     try {
       const token = req.headers.authorization.split(' ')[1];
-      const user = jwt.verify(token, process.env.JWT_SECRET);
-      
-      if (user.isAdmin) {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  
+     
+      const user = await getUserById(decoded.id);
+  
+      if (user && user.isAdmin) {
         next();
       } else {
         next({
           name: 'UnauthorizedError',
-          message: 'You must be an admin to perform this action'
+          message: 'You must be an admin to perform this action',
         });
       }
     } catch (error) {
-        next(error);
+      next(error);
     }
-};
+  };
+  
 
 usersRouter.get('/', requireAdmin, async(req, res, next) => {
     try {
@@ -130,17 +137,34 @@ usersRouter.get('/', requireAdmin, async(req, res, next) => {
 
 usersRouter.delete('/:id', requireAdmin, async (req, res, next) => {
     try {
-        const user = await deleteUser(req.params.id)
+        const id = parseInt(req.params.id, 10); 
+
+        if (isNaN(id)) {
+            return next({
+                name: 'InvalidIdError',
+                message: 'The id must be a valid integer'
+            });
+        }
+
+        const user = await deleteUser(id);
+
+        if (!user) {
+            return next({
+                name: 'UserNotFoundError',
+                message: `User with id ${id} not found`
+            });
+        }
 
         res.send({
             user
         });
 
     } catch (err) {
-        console.log(err)
-        next (err);
+        console.error(err);
+        next(err);
     }
 })
+
 
 usersRouter.put('/:id', requireAdmin, async (req, res, next) => {
     try {
