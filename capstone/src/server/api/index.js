@@ -40,11 +40,11 @@ apiRouter.use('/items', itemsRouter);
 const usersRouter = require('./users');
 apiRouter.use('/users', usersRouter);
 
-const itemsRouter = require('./items');
-apiRouter.use('/items', itemsRouter);
-
 const reviewsRouter = require('./reviews');
 apiRouter.use('/reviews', reviewsRouter);
+
+const commentsRouter = require('./comments')
+apiRouter.use('/comments', commentsRouter)
 
 apiRouter.use((err, req, res, next) => {
     res.status(500).send(err)
