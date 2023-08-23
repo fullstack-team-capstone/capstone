@@ -1,22 +1,26 @@
+// db/comments.js
+
 const db = require('./client')
 
 const createComment = async({
-    thumbsUpOrDown,
+    "thumbsUpOrDown": thumbsUpOrDown,
     title,
-    commentBody
+    "commentBody": commentBody
 }) => {
     try{
-        const{rows:[comment]} = await db.query (`
-        INSERT INTO comments (thumbsUpOrDown, title, commentBody)
+        const {rows:[comment]} = await db.query(`
+        INSERT INTO comments ("thumbsUpOrDown", title, "commentBody")
         VALUES ($1, $2, $3)
-        RETURNING * `, [thumbsUpOrDown, title, commentBody])
+        RETURNING *`, [thumbsUpOrDown, title, commentBody]);
 
-        return comment
-
+        return comment;
     } catch (error) {
-        throw error
+        throw error;
     }
 }
+
+  
+  
 
 const getAllComments = async() => {
     try{

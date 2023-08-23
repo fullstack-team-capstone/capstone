@@ -60,12 +60,14 @@ const reviews = [
 
 const comments = [
   {
+    userid: 1, // Replace with an actual user ID
+    reviewid: 1, // Replace with an actual review ID
     thumbsUpOrDown: true,
     title: 'Great Review',
-    commentBody:'I got the same product and it performed just as you mentioned!'
+    commentBody: 'I got the same product and it performed just as you mentioned!'
   }
+];
 
-]
 
 
 const dropTables = async () => {
@@ -118,9 +120,9 @@ const createTables = async () => {
           commentid SERIAL PRIMARY KEY,
           userid INTEGER REFERENCES users(id),
           reviewid INTEGER REFERENCES reviews(reviewid),
-          thumbsUpOrDown BOOLEAN DEFAULT true, 
+          "thumbsUpOrDown" BOOLEAN DEFAULT true, 
           title VARCHAR(255) NOT NULL,
-          commentBody TEXT NOT NULL
+          "commentBody" TEXT NOT NULL
           
 
 
@@ -170,13 +172,20 @@ const insertReviews = async () => {
 const insertComments = async () => {
   try {
     for (const comment of comments) {
-      await createComment({thumbsUpOrDown: comment.thumbsUpOrDown || false, title: comment.title, commentBody: comment.commentBody});
+      await createComment({
+        userid: comment.userid,
+        reviewid: comment.reviewid,
+        thumbsUpOrDown: comment.thumbsUpOrDown || false,
+        title: comment.title,
+        commentBody: comment.commentBody
+      });
     }
     console.log('Seed data inserted successfully.');
   } catch (error) {
     console.error('Error inserting seed data:', error);
   }
 };
+
 
 const seedDatabse = async () => {
     try {

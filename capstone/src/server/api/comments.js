@@ -1,3 +1,5 @@
+// api/comments.js
+
 const express = require('express')
 const commentsRouter = express.Router()
 
@@ -5,17 +7,20 @@ const {createComment, getAllComments, getCommentById, deleteCommentById, editCom
 
 
 commentsRouter.post('/', async(req, res, next) => {
-    const {thumbsUpOrDown, title, commentBody} = req.body
+    const { thumbsUpOrDown, title, commentBody } = req.body;
     try {
-        const comment = await createComment ({
-            thumbsUpOrDown: true, 
-            title,
-            commentBody
-        }) 
-    } catch(error){
-        throw error
+      const comment = await createComment({
+        thumbsUpOrDown: thumbsUpOrDown || true, 
+        title,
+        commentBody
+      });
+      res.send({ comment });
+    } catch(error) {
+      throw error;
     }
-} )
+  });
+  
+  
 
 commentsRouter.get('/', async(req, res, next) =>{
     try{
