@@ -1,3 +1,5 @@
+// db/seed.js
+
 const db = require('./client');
 const { createUser } = require('./users');
 const { createItem } = require('./items')
@@ -76,7 +78,7 @@ const createTables = async () => {
             username VARCHAR(255) DEFAULT 'username',
             email VARCHAR(255) UNIQUE NOT NULL,
             password VARCHAR(255) NOT NULL,
-            isAdmin BOOLEAN DEFAULT false
+            "isAdmin" BOOLEAN DEFAULT false
         );
 
         CREATE TABLE items(
@@ -90,14 +92,14 @@ const createTables = async () => {
 
         CREATE TABLE reviews(
           reviewid SERIAL PRIMARY KEY,
-          userid INTEGER REFERENCES users(id),
-          reviewableid INTEGER REFERENCES items(id),
+          userid INTEGER REFERENCES users(id) ON DELETE CASCADE,
+          reviewableid INTEGER REFERENCES items(id) ON DELETE CASCADE,
           title VARCHAR(255) NOT NULL,
           stars INTEGER NOT NULL,
           reviewbody TEXT NOT NULL,
           bottomline BOOLEAN DEFAULT false
-
         );
+        
 
 
         `)

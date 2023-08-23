@@ -1,41 +1,55 @@
-// server/api/index.js
+// api/index.js
 
 const express = require('express');
 const apiRouter = express.Router();
 const jwt = require('jsonwebtoken');
+const { getUserById } = require('../db/users');
+const volleyball = require('volleyball');
+apiRouter.use(volleyball);
 
-const volleyball = require('volleyball')
-apiRouter.use(volleyball)
 
-// TO BE COMPLETED - set `req.user` if possible, using token sent in the request header
+apiRouter.use((req, res, next) => {
+  const authHeader = req.header('Authorization');
+  console.log("Authorization Header:", authHeader); 
+  next();
+});
+
 apiRouter.use(async (req, res, next) => {
+  const prefix = 'Bearer ';
   const auth = req.header('Authorization');
-  
-  if (!auth) { 
+  if (!auth) {
     next();
-  } 
-  else if (auth.startsWith('REPLACE_ME')) {
-    // TODO - Get JUST the token out of 'auth'
-    const token = 'REPLACE_ME';
-    
-    try {
-      const parsedToken = 'REPLACE_ME';
-      // TODO - Call 'jwt.verify()' to see if the token is valid. If it is, use it to get the user's 'id'. Look up the user with their 'id' and set 'req.user'
+  } else if (auth.startsWith(prefix)) {
+    const token = auth.slice(prefix.length);
 
+    
+    console.log("Extracted Token:", token); 
+    console.log("JWT_SECRET:", process.env.JWT_SECRET);
+
+    try {
+      const { id } = jwt.verify(token, process.env.JWT_SECRET);
+      if (id) {
+        req.user = await getUserById(id);
+        next();
+      } else {
+        next({
+          name: 'AuthorizationHeaderError',
+          message: 'Authorization token malformed',
+        });
+      }
     } catch (error) {
+      console.log(error);
       next(error);
     }
-  } 
-  else {
-    next({
-      name: 'AuthorizationHeaderError',
-      message: `Authorization token must start with 'Bearer'`
-    });
   }
 });
 
-const itemsRouter = require('./items');
-apiRouter.use('/items', itemsRouter);
+apiRouter.use((req, res, next) => {
+  if (req.user) {
+    console.log('User is set:', req.user);
+  }
+  next();
+});
 
 const usersRouter = require('./users');
 apiRouter.use('/users', usersRouter);
@@ -47,9 +61,7 @@ const reviewsRouter = require('./reviews');
 apiRouter.use('/reviews', reviewsRouter);
 
 apiRouter.use((err, req, res, next) => {
-    res.status(500).send(err)
-  
-
-  })
+  res.status(500).send({ error: err.message });
+});
 
 module.exports = apiRouter;
