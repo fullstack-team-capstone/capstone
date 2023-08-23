@@ -1,6 +1,7 @@
-const express = require('express')
-const usersRouter = express.Router();
+// api/users.js
 
+const express = require('express');
+const usersRouter = express.Router();
 const {
     createUser,
     getUser,
@@ -9,48 +10,60 @@ const {
     deleteUser,
     editUser
 } = require('../db');
-
-const jwt = require('jsonwebtoken')
-
+const jwt = require('jsonwebtoken');
 
 usersRouter.post('/login', async(req, res, next) => {
     const { email, password } = req.body;
-    if(!email || !password) {
+    if (!email || !password) {
         next({
             name: 'MissingCredentialsError',
             message: 'Please supply both an email and password'
         });
     }
-
+    if (!process.env.JWT_SECRET) {
+        next({
+            name: 'MissingSecretError',
+            message: 'JWT_SECRET must be defined'
+        });
+        return;
+    }
     try {
         const user = await getUser({email, password});
-        if(user) {
+        if (user) {
             const token = jwt.sign({
                 id: user.id,
                 email
             }, process.env.JWT_SECRET, {
                 expiresIn: '1w'
             });
-
             res.send({
                 message: 'Login successful!',
                 token
             });
-        }
-        else {
+        } else {
             next({
                 name: 'IncorrectCredentialsError',
                 message: 'Email or password is incorrect'
             });
         }
-    } catch(error) {
-        consloe/log(error)
+    } catch (error) {
+        console.log(error); // Fixed typo
         next(error);
     }
 });
 
+
 usersRouter.post('/register', async(req, res, next) => {
     const { username, email, password } = req.body;
+
+    // Check for the JWT secret
+    if (!process.env.JWT_SECRET) {
+        next({
+            name: 'MissingSecretError',
+            message: 'JWT_SECRET must be defined'
+        });
+        return;
+    }
 
     try {
         const _user = await getUserByEmail(email);
@@ -98,13 +111,10 @@ const requireAdmin = (req, res, next) => {
           message: 'You must be an admin to perform this action'
         });
       }
-      res.send({
-        isAdmin
-      })
     } catch (error) {
-      next(error);
+        next(error);
     }
-  }
+};
 
 usersRouter.get('/', requireAdmin, async(req, res, next) => {
     try {
@@ -146,3 +156,4 @@ usersRouter.put('/:id', requireAdmin, async (req, res, next) => {
 })
 
 module.exports = usersRouter;
+

@@ -1,3 +1,5 @@
+// db/items.js
+
 const db = require('./client')
 
 const createItem = async ({itemName, imageUrl, description, isHighlighted}) => {

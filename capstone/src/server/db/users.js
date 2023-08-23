@@ -1,3 +1,5 @@
+// db/users.js
+
 const db = require('./client')
 const bcrypt = require('bcrypt');
 const SALT_COUNT = 10;
@@ -99,17 +101,19 @@ const editUser = async (id, fields={}) => {
 
 const getUserById = async (id) => {
     try {
-        // DO THIS FIRST!!
+      const { rows: [user] } = await db.query('SELECT * FROM users WHERE id = $1', [id]);
+      return user;
     } catch (error) {
-        throw error
+      throw error;
     }
-}
+  }
 
-module.exports = {
+  module.exports = {
     createUser,
     getUser,
     getUserByEmail,
     getAllUsers,
     deleteUser,
-    editUser
-};
+    editUser,
+    getUserById 
+  };

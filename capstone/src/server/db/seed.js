@@ -1,3 +1,5 @@
+// db/seed.js
+
 const db = require('./client');
 const { createUser } = require('./users');
 const { createItem } = require('./items')
