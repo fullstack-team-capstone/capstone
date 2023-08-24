@@ -69,14 +69,21 @@ reviewsRouter.get('/:reviewId', async (req, res, next) => {
 });
 
 reviewsRouter.post('/', requireUser, async (req, res, next) => {
-  // Admin or author can create a review
-  try {
-    const review = await createReview(req.body);
-    res.send({ review });
-  } catch (err) {
-    next(err);
-  }
-});
+    const {title, stars, reviewbody, bottomline} = req.body
+    const userid = req.user.id;
+    try {
+      const review = await createReview({
+        userid,  
+        title, 
+        stars, 
+        reviewbody,
+        bottomline
+    })
+      res.send({ review });
+    } catch (err) {
+      next(err);
+    }
+  });
 
 reviewsRouter.patch('/:reviewId', requireAuthor, async (req, res, next) => {
   // Only the author can update their review

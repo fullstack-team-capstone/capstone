@@ -3,15 +3,16 @@
 const db = require('./client')
 
 const createComment = async({
+    userid,
     "thumbsUpOrDown": thumbsUpOrDown,
     title,
     "commentBody": commentBody
 }) => {
     try{
         const {rows:[comment]} = await db.query(`
-        INSERT INTO comments ("thumbsUpOrDown", title, "commentBody")
-        VALUES ($1, $2, $3)
-        RETURNING *`, [thumbsUpOrDown, title, commentBody]);
+        INSERT INTO comments ("userid", "thumbsUpOrDown", title, "commentBody")
+        VALUES ($1, $2, $3, $4)
+        RETURNING *`, [userid, thumbsUpOrDown, title, commentBody]);
 
         return comment;
     } catch (error) {

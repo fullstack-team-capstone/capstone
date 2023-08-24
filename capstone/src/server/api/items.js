@@ -50,9 +50,11 @@ itemsRouter.get('/:id', async (req, res, next) => {
 itemsRouter.post('/', requireAdmin, async (req, res, next) =>{
 
     const {itemName, imageUrl, description} = req.body
+    const authorId = req.user.id;
     try {
 
         const item = await createItem({
+            authorId,
             itemName, 
             imageUrl, 
             description,
