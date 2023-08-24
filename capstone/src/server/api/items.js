@@ -11,6 +11,16 @@ const {
     editItem
 } = require('../db')
 
+const requireAdmin = async (req, res, next) => {
+    const id = req.params.id;
+    const item = await getItemById(id);
+    if (req.user.isAdmin) {
+      next();
+    } else {
+      res.status(403).send({ error: 'You must be an admin to perform this action' });
+    }
+  };
+
 itemsRouter.get('/', async (req, res, next) => {
     try {
         const items = await getAllItems();
@@ -37,7 +47,7 @@ itemsRouter.get('/:id', async (req, res, next) => {
     }
 })
 
-itemsRouter.post('/', async(req, res, next) =>{
+itemsRouter.post('/', requireAdmin, async (req, res, next) =>{
 
     const {itemName, imageUrl, description} = req.body
     try {
@@ -58,7 +68,7 @@ itemsRouter.post('/', async(req, res, next) =>{
     }
 })
 
-itemsRouter.delete('/:id', async (req, res, next) => {
+itemsRouter.delete('/:id', requireAdmin, async (req, res, next) => {
     try {
         const item = await deleteItem(req.params.id)
 
@@ -71,7 +81,7 @@ itemsRouter.delete('/:id', async (req, res, next) => {
     }
 })
 
-itemsRouter.put('/:id', async (req, res, next) => {
+itemsRouter.put('/:id', requireAdmin, async (req, res, next) => {
     try {
         const item = await editItem(req.params.id, req.body)
 

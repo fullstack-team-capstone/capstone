@@ -1,3 +1,5 @@
+// api/reviews.js
+
 const express = require('express');
 const reviewsRouter = express.Router();
 const {
@@ -7,6 +9,8 @@ const {
   updateReview,
   deleteReview
 } = require('../db/reviews');
+const{ getUserById } = require('../db')
+const jwt = require('jsonwebtoken');
 
 // Middleware to require admin or author access
 const requireAdminOrAuthor = async (req, res, next) => {
@@ -30,6 +34,20 @@ const requireAuthor = async (req, res, next) => {
   }
 };
 
+const requireUser = async (req, res, next) => {
+  const token = req.headers.authorization.split(' ')[1];
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  const user = await getUserById(decoded.id);
+  if (user) {
+    next();
+  } else{
+    next({
+      name: 'UnauthorizedError',
+      message: 'You must be logged in to perform this action',
+    });
+  }
+}
+
 reviewsRouter.get('/', async (req, res, next) => {
   // No changes here
   try {
@@ -50,7 +68,7 @@ reviewsRouter.get('/:reviewId', async (req, res, next) => {
   }
 });
 
-reviewsRouter.post('/', requireAdminOrAuthor, async (req, res, next) => {
+reviewsRouter.post('/', requireUser, async (req, res, next) => {
   // Admin or author can create a review
   try {
     const review = await createReview(req.body);
@@ -70,8 +88,8 @@ reviewsRouter.patch('/:reviewId', requireAuthor, async (req, res, next) => {
   }
 });
 
-reviewsRouter.delete('/:reviewId', requireAuthor, async (req, res, next) => {
-  // Only the author can delete their review
+reviewsRouter.delete('/:reviewId', requireAdminOrAuthor, async (req, res, next) => {
+  // Admin and Author can delete their review
   try {
     await deleteReview(req.params.reviewId);
     res.send({ message: 'Review deleted successfully' });
