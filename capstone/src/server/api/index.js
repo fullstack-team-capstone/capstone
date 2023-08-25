@@ -60,6 +60,9 @@ apiRouter.use('/reviews', reviewsRouter);
 const commentsRouter = require('./comments')
 apiRouter.use('/comments', commentsRouter)
 
+const itemsRouter = require('./items')
+apiRouter.use('/items', itemsRouter)
+
 apiRouter.use((err, req, res, next) => {
   res.status(500).send({ error: err.message });
 });
