@@ -1,21 +1,19 @@
 // db/items.js
 
 const db = require('./client')
-
-const createItem = async ({itemName, imageUrl, description, isHighlighted}) => {
+const createItem = async ({ authorId, itemName, imageUrl, description, isHighlighted }) => {
     try {
+        const { rows: [item] } = await db.query(`
+        INSERT INTO items("authorId", itemName, imageUrl, description, isHighlighted)
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING * `, [authorId, itemName, imageUrl, description, isHighlighted]);
 
-        const {rows:[item]} = await db.query(`
-        INSERT INTO items(itemName, imageUrl, description, isHighlighted)
-        VALUES ($1, $2, $3, $4)
-        RETURNING * `, [itemName, imageUrl, description, isHighlighted]) 
-
-        return item
-
+        return item;
     } catch (err) {
-        throw err
+        throw err;
     }
 }
+
 
 const getAllItems = async () => {
     try {
