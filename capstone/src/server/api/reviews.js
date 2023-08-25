@@ -69,11 +69,12 @@ reviewsRouter.get('/:reviewId', async (req, res, next) => {
 });
 
 reviewsRouter.post('/', requireUser, async (req, res, next) => {
-    const {title, stars, reviewbody, bottomline} = req.body
+    const {reviewableid, title, stars, reviewbody, bottomline} = req.body
     const userid = req.user.id;
     try {
       const review = await createReview({
-        userid,  
+        userid,
+        reviewableid,  
         title, 
         stars, 
         reviewbody,

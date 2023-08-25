@@ -44,11 +44,12 @@ const requireUser = async (req, res, next) => {
   }
 
 commentsRouter.post('/', requireUser, async(req, res, next) => {
-    const { thumbsUpOrDown, title, commentBody } = req.body;
+    const { reviewid, thumbsUpOrDown, title, commentBody } = req.body;
     const userid = req.user.id;
     try {
       const comment = await createComment({
         userid,
+        reviewid,
         thumbsUpOrDown: thumbsUpOrDown || false, 
         title,
         commentBody
