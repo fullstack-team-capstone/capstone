@@ -273,7 +273,7 @@ const insertItems = async () => {
 const insertReviews = async () => {
   try {
     for (const review of reviews) {
-      await createReview({title: review.title, stars: review.stars, reviewbody: review.reviewbody, bottomline: review.bottomline || false});
+      await createReview({userid: review.userid, reviewableid: review.reviewableid, title: review.title, stars: review.stars, reviewbody: review.reviewbody, bottomline: review.bottomline || false});
     }
     console.log('Seed data inserted successfully.');
   } catch (error) {
