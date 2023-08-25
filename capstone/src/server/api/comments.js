@@ -4,9 +4,46 @@ const express = require('express')
 const commentsRouter = express.Router()
 
 const {createComment, getAllComments, getCommentById, deleteCommentById, editComment} = require('../db')
+const{ getUserById } = require('../db')
+const jwt = require('jsonwebtoken');
 
+// Middleware to require admin or author access
+const requireAdminOrAuthor = async (req, res, next) => {
+    const reviewId = req.params.reviewId;
+    const review = await getCommentById(reviewId);
+    if (req.user.isAdmin || req.user.id === review.userid) {
+      next();
+    } else {
+      res.status(403).send({ error: 'You must be an admin or the author of this review to perform this action' });
+    }
+  };
+  
+// Middleware to require author access
+const requireAuthor = async (req, res, next) => {
+    const reviewId = req.params.reviewId;
+    const review = await getCommentById(reviewId);
+    if (req.user.id === review.userid) {
+      next();
+    } else {
+      res.status(403).send({ error: 'You must be the author of this review to perform this action' });
+    }
+  };
 
-commentsRouter.post('/', async(req, res, next) => {
+const requireUser = async (req, res, next) => {
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await getUserById(decoded.id);
+    if (user) {
+      next();
+    } else{
+      next({
+        name: 'UnauthorizedError',
+        message: 'You must be logged in to perform this action',
+      });
+    }
+  }
+
+commentsRouter.post('/', requireUser, async(req, res, next) => {
     const { thumbsUpOrDown, title, commentBody } = req.body;
     try {
       const comment = await createComment({
@@ -40,7 +77,7 @@ commentsRouter.get('/:commentid', async(req, res, next) =>{
     }
 })
 
-commentsRouter.delete('/:commentid', async(req, res, next) => {
+commentsRouter.delete('/:commentid', requireAdminOrAuthor, async(req, res, next) => {
 
     try{
         const comment = await deleteCommentById(req.params.commentid)
@@ -54,7 +91,7 @@ commentsRouter.delete('/:commentid', async(req, res, next) => {
 })
 
 
-commentsRouter.put('/:commentid', async(req, res, next) => {
+commentsRouter.put('/:commentid', requireAuthor, async(req, res, next) => {
 
     try{
         const comment = await editComment(req.params.commentid, req.body)
