@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();  // Add this line for navigation
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -28,11 +29,12 @@ const Login = () => {
         });
         const result = await response.json();
         setMessage(result.message);
-        if(!response.ok) {
+        if (!response.ok) {
           throw(result)
         }
         setEmail('');
         setPassword('');
+        navigate('/user');  // Navigate to Userpage.jsx upon successful login
     } catch (err) {
         console.error(`${err.name}: ${err.message}`);
     }
