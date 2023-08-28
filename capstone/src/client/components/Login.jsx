@@ -5,7 +5,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-  const navigate = useNavigate();  // Add this line for navigation
+  const navigate = useNavigate();  
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -34,7 +34,7 @@ const Login = () => {
         }
         setEmail('');
         setPassword('');
-        navigate('/user');  // Navigate to Userpage.jsx upon successful login
+        navigate('/user');  
     } catch (err) {
         console.error(`${err.name}: ${err.message}`);
     }
