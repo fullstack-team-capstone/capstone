@@ -7,6 +7,7 @@ import Userpage from './components/Userpage';
 import Singleitem from './components/Singleitem';
 import Signup from './components/Signup';
 import Navbar from './components/Navbar';
+import Home from './components/Home';
 import Items from './components/Items';
 import './App.css';
 
@@ -17,6 +18,7 @@ function App() {
     <div className='App'>
       <Navbar />
       <Routes>
+        <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/user' element={<Userpage />} />
