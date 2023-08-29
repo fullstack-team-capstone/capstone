@@ -1,29 +1,46 @@
 
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
-import React from 'react';
+const Delete = () => {
+  const [itemName, setItemName] = useState('');
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
-const Delete = ({ reviewId, userId, isAdmin }) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get(`/api/items/${id}`);
+        setItemName(data.itemName);
+      } catch (error) {
+        console.error('An error occurred while fetching data: ', error);
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
   const handleDelete = async () => {
     try {
-      // Ensure the user is either the admin or the author
-      if (isAdmin || userId === reviewId) {
-        // Perform the delete operation (replace with actual API call)
-        await fetch(`http://localhost:3000/api/reviews/${reviewId}`, {
-          method: 'DELETE',
-        });
-        alert('Review deleted successfully.');
-      } else {
-        alert('You do not have permission to delete this review.');
-      }
+      await axios.delete(`/api/items/${id}`);
+      navigate('/');
     } catch (error) {
-      console.error('An error occurred while deleting the review:', error);
+      console.error('An error occurred while deleting the item: ', error);
     }
   };
 
   return (
-    <button onClick={handleDelete}>Delete Review</button>
+    <div>
+     
+      {(user.role === 'admin' || user._id === id) && (
+        <button onClick={handleDelete}>Delete</button>
+      )}
+      
+    </div>
   );
 };
 
 export default Delete;
-

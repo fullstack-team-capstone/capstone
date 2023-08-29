@@ -1,13 +1,17 @@
 // components/Login.jsx
 
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';  // Import useAuth
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();  
+
+  const { login } = useAuth();  // Use login function from AuthContext
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -17,7 +21,7 @@ const Login = () => {
     setPassword(e.target.value);
   };
 
-  const login = async() => {
+  const loginFunction = async() => {
     try {
         const response = await fetch('http://localhost:3000/api/users/login', {
             method: 'POST',
@@ -34,6 +38,7 @@ const Login = () => {
         if (!response.ok) {
           throw(result)
         }
+        login(result.token);  // Use login function from AuthContext
         setEmail('');
         setPassword('');
         navigate('/user');  
@@ -44,7 +49,7 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    login();
+    loginFunction();
   };
 
   return (
