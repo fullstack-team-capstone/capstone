@@ -5,23 +5,26 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Delete = () => {
-  const [itemName, setItemName] = useState('');
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const { user } = useAuth();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data } = await axios.get(`/api/items/${id}`);
-        setItemName(data.itemName);
-      } catch (error) {
-        console.error('An error occurred while fetching data: ', error);
-      }
-    };
-
-    fetchData();
-  }, [id]);
+    const [itemName, setItemName] = useState('');
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const { user } = useAuth();
+  
+    console.log("User info:", user);  // Debugging user info
+    console.log("Item ID:", id);  // Debugging item ID
+  
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const { data } = await axios.get(`/api/items/${id}`);
+          setItemName(data.itemName);
+        } catch (error) {
+          console.error('An error occurred while fetching data: ', error);
+        }
+      };
+  
+      fetchData();
+    }, [id]);
 
   const handleDelete = async () => {
     try {
