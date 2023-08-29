@@ -1,3 +1,6 @@
+// components/Reviews.jsx
+
+
 import React, { useState, useEffect } from 'react';
 
 const Reviews = ({ itemId }) => {
@@ -33,3 +36,4 @@ const Reviews = ({ itemId }) => {
 };
 
 export default Reviews;
+

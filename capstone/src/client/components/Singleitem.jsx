@@ -1,9 +1,11 @@
 // components/Singleitem.jsx
 
+
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import Reviews from './Reviews';  // Import the Reviews component
+import Delete from './Delete';  // Import the Delete component
 
 const Singleitem = () => {
   const { id } = useParams();
@@ -35,6 +37,7 @@ const Singleitem = () => {
             </Card.Body>
           </Card>
           <Reviews itemId={id} />  {/* Render the Reviews component under the item */}
+          <Delete itemId={id} />  {/* Render the Delete component under the reviews */}
         </>
       ) : (
         <p>Loading...</p>
@@ -44,4 +47,3 @@ const Singleitem = () => {
 };
 
 export default Singleitem;
-
