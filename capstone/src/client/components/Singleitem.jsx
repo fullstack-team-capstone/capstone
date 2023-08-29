@@ -1,12 +1,44 @@
-import React from 'react';
+// components/Singleitem.jsx
+
+
+
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import Card from 'react-bootstrap/Card';
 
 const Singleitem = () => {
+  const { id } = useParams();
+  const [product, setProduct] = useState(null);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/api/items/${id}`);
+        const data = await response.json();
+        setProduct(data.item);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchProduct();
+  }, [id]);
+
   return (
     <div>
-      <h1>Hello, World!</h1>
-      <p>This is a boilerplate React JSX component.</p>
+      {product ? (
+        <Card style={{ width: '18rem' }}>
+          <Card.Img variant="top" src={product.imageurl} /> {/* Changed to imageUrl to match backend */}
+          <Card.Body>
+            <Card.Title>{product.itemname}</Card.Title> {/* Changed to itemName to match backend */}
+            <Card.Text>{product.description}</Card.Text>
+          </Card.Body>
+        </Card>
+      ) : (
+        <p>Loading...</p>
+      )}
     </div>
   );
 };
 
 export default Singleitem;
+

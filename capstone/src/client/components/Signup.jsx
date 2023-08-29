@@ -1,3 +1,5 @@
+// components/Signup.jsx
+
 import React, { useState } from 'react';
 
 const Signup = () => {

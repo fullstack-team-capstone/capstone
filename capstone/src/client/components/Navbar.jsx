@@ -1,3 +1,5 @@
+// components/Navbar.jsx
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../css/Navbar.css';
@@ -10,6 +12,7 @@ const Navbar = () => {
       </div>
       <div className='navbar-right'>
         <Link to='/login'>Login</Link>
+        <Link to='/items'>Items</Link>  {/* Added link to Items */}
       </div>
     </div>
   );
