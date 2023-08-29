@@ -1,0 +1,30 @@
+/* update with your own custom color scheme */
+$primary: #4f4e50;
+$secondary: #929193;
+
+$link-color: $primary;
+$success: #28a745;
+$info: #17a2b8;
+$warning: #ffc107;
+$danger: #dc3545;
+
+
+/* import bootstrap to set changes */
+@import '../../node_modules/bootstrap/scss/bootstrap';
+// @import '../../node_modules/bootstrap/scss/functions';
+@import '../../node_modules/bootstrap/scss/variables';
+
+/* import cool fonts */
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,500&family=Eczar&family=Righteous&family=Roboto+Mono&family=Rubik&display=swap');
+
+// add any of your own CSS here
+body { 
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-family: 'Righteous', cursive;
+    font-family: 'Rubik', sans-serif;
+}
+
+// or overwrite the built-in styles if desired
+.card {
+    border: $info solid 5px;
+}
