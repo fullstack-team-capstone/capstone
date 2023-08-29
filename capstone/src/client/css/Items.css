@@ -1,0 +1,23 @@
+
+/* Style for making all cards of equal size */
+.equal-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .equal-card .card-body {
+    flex: 1;
+  }
+  
+  /* Style for 4 items per row */
+  .col-md-3 {
+    flex: 0 0 calc(25% - 1rem);
+    max-width: calc(25% - 1rem);
+  }
+  
+  /* Style for space between rows */
+  .row-spacing {
+    margin-bottom: 2rem;
+  }
+  

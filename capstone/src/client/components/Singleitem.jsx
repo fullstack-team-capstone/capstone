@@ -1,7 +1,5 @@
 // components/Singleitem.jsx
 
-
-
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
@@ -27,9 +25,9 @@ const Singleitem = () => {
     <div>
       {product ? (
         <Card style={{ width: '18rem' }}>
-          <Card.Img variant="top" src={product.imageurl} /> {/* Changed to imageUrl to match backend */}
+          <Card.Img variant="top" src={product.imageurl} />
           <Card.Body>
-            <Card.Title>{product.itemname}</Card.Title> {/* Changed to itemName to match backend */}
+            <Card.Title>{product.itemname}</Card.Title>
             <Card.Text>{product.description}</Card.Text>
           </Card.Body>
         </Card>
@@ -41,4 +39,3 @@ const Singleitem = () => {
 };
 
 export default Singleitem;
-
