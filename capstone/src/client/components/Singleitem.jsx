@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
+import Reviews from './Reviews';  // Import the Reviews component
 
 const Singleitem = () => {
   const { id } = useParams();
@@ -18,19 +19,23 @@ const Singleitem = () => {
         console.error(error);
       }
     };
+
     fetchProduct();
   }, [id]);
 
   return (
     <div>
       {product ? (
-        <Card style={{ width: '18rem' }}>
-          <Card.Img variant="top" src={product.imageurl} />
-          <Card.Body>
-            <Card.Title>{product.itemname}</Card.Title>
-            <Card.Text>{product.description}</Card.Text>
-          </Card.Body>
-        </Card>
+        <>
+          <Card style={{ width: '18rem' }}>
+            <Card.Img variant="top" src={product.imageurl} />
+            <Card.Body>
+              <Card.Title>{product.itemname}</Card.Title>
+              <Card.Text>{product.description}</Card.Text>
+            </Card.Body>
+          </Card>
+          <Reviews itemId={id} />  {/* Render the Reviews component under the item */}
+        </>
       ) : (
         <p>Loading...</p>
       )}
@@ -39,3 +44,4 @@ const Singleitem = () => {
 };
 
 export default Singleitem;
+
