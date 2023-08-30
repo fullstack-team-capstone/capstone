@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext"; // Import useAuth
 
-const Login = () => {
+const Login = ({setUser}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -42,6 +42,9 @@ const Login = () => {
       login(result.token); // Use login function from AuthContext
       setEmail("");
       setPassword("");
+      console.log('result', result)
+      console.log('user: ', result.user)
+      setUser(result.user)
       navigate("/user");
     } catch (err) {
       console.error(`${err.name}: ${err.message}`);
