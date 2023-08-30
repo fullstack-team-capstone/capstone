@@ -1,4 +1,4 @@
-/* update with your own custom color scheme */
+
 $primary: #4f4e50;
 $secondary: #929193;
 
@@ -8,10 +8,8 @@ $info: #17a2b8;
 $warning: #ffc107;
 $danger: #dc3545;
 
-
 /* import bootstrap to set changes */
 @import '../../node_modules/bootstrap/scss/bootstrap';
-// @import '../../node_modules/bootstrap/scss/functions';
 @import '../../node_modules/bootstrap/scss/variables';
 
 /* import cool fonts */
@@ -24,7 +22,20 @@ body {
     font-family: 'Rubik', sans-serif;
 }
 
-// or overwrite the built-in styles if desired
-.card {
-    border: $info solid 5px;
+// Custom styles for item cards
+.col-md-3 .card {
+    border: 2px solid black;  // Add black borders
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.col-md-3 .card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.col-md-3 .card-body .card-link {
+    margin-top: auto;  // Push the "View Item" link to the bottom
 }
