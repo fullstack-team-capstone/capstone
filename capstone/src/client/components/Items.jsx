@@ -1,17 +1,22 @@
+
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import React, { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col"
+import Col from "react-bootstrap/Col";
+import { Link } from 'react-router-dom';
 
 function Items() {
+
   const [products, setProducts] = useState([])
   const [reviews, setReviews] = useState([])
+
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+
       let response = await fetch('http://localhost:3000/api/items')
       let data = await response.json()
       setProducts(data.items)
@@ -56,10 +61,11 @@ function Items() {
 
   return (
     <Container>
-      <Row>
+      <Row className="row-spacing">
         {products.map((product) => { 
           
           return (
+
             <Col key={product.id}>
                 <Card style={{ width: '18rem' }}>
                   <Card.Img variant="top" src={product.imageurl} />
@@ -73,13 +79,13 @@ function Items() {
                     <Card.Link href="http://localhost:3000/items">View Item</Card.Link>
                   </Card.Body>
                 </Card>
+
             </Col>
           )
-          } 
-          )}
-        </Row> 
+        })}
+      </Row>
     </Container>
-    );
+  );
 }
 
 export default Items;
