@@ -37,7 +37,6 @@ function Items() {
       (product.itemname && product.itemname.toLowerCase().includes(query)) ||
       (product.description && product.description.toLowerCase().includes(query))
     );
-
     setFilteredProducts(filteredProd);
   };
 
@@ -53,7 +52,7 @@ function Items() {
         <div className="search-dropdown">
           {filteredProducts.map((product, index) => (
             <div key={index}>
-              <p>{product.itemname}</p>
+              <Link to={`/items/${product.id}`}><p>{product.itemname}</p></Link>
             </div>
           ))}
         </div>
