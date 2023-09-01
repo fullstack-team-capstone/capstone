@@ -8,10 +8,14 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Link } from 'react-router-dom';
 
-function Items() {
-  const [products, setProducts] = useState([]);
+
+function Items({user}) {
+  console.log('is the user here??', user)
+  const [products, setProducts] = useState([])
+  const [reviews, setReviews] = useState([])
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredProducts, setFilteredProducts] = useState([]);
+
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -60,6 +64,7 @@ function Items() {
         </div>
       )}
       <Row className="row-spacing">
+
         {products.map((product) => (
           <Col key={product.id}>
             <Card style={{ width: '18rem' }}>
@@ -76,6 +81,7 @@ function Items() {
             </Card>
           </Col>
         ))}
+
       </Row>
     </Container>
   );
