@@ -15,11 +15,11 @@ const Navbar = () => {
       <div className='navbar-right'>
         {isLoggedIn ? (
           <>
-
             <Link to='/user'>Profile</Link>
-
             <Link to='/items'>Items</Link>
-            {user && user.isAdmin && <Link to='/admin'>Admin</Link>} {/* Show Admin link if user is an admin */}
+
+            {/* Check if user exists and is an admin before showing the Admin link */}
+            {user && user.isAdmin && <Link to='/admin'>Admin</Link>}
 
             <Logout />  {/* Render the Logout component when logged in */}
           </>

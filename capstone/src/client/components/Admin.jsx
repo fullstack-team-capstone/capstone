@@ -1,25 +1,45 @@
+// components/Admin.jsx
+
 import React, { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-const Admin = () => {
-    const [users, setUsers] = useState([]);
-    const [items, setItems] = useState([]);
-    const [newItem, setNewItem] = useState({
-        itemName: '',
-        imageUrl: '',
-        description: '',
-        isHighlighted: false
-    });
-    const [isLoading, setIsLoading] = useState(true);
+const Admin = ({ user }) => {
+  const navigate = useNavigate();
+  const [currentUser, setCurrentUser] = useState(null);
+  const [users, setUsers] = useState([]);
+  const [items, setItems] = useState([]);
+  const [newItem, setNewItem] = useState({
+    itemName: '',
+    imageUrl: '',
+    description: '',
+    isHighlighted: false
+  });
+  const [isLoading, setIsLoading] = useState(true);
 
   const [showModal, setShowModal] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null);
 
   useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const token = localStorage.getItem("JWT_SECRET");  // Using JWT_SECRET as the key
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        };
+        const response = await axios.get('http://localhost:3000/api/admin/current-user', config);
+        setCurrentUser(response.data);
+      } catch (error) {
+        console.error('Failed to fetch current user:', error);
+      }
+    };
+
     const fetchUsers = async () => {
       try {
         const response = await axios.get('http://localhost:3000/api/admin/users');
@@ -40,9 +60,20 @@ const Admin = () => {
       }
     };
 
+    fetchCurrentUser();
     fetchUsers();
     fetchItems();
   }, []);
+
+  useEffect(() => {
+    if (currentUser !== null) {
+      const isAdmin = currentUser.some(user => user.isAdmin);
+      if (!isAdmin) {
+        navigate('/');
+      }
+    }
+  }, [currentUser, navigate]);
+
 
   const addItem = async () => {
     try {
@@ -87,6 +118,14 @@ const Admin = () => {
       console.error('Error deleting item:', err);
     }
   };
+
+  console.log('Current user in Admin:', currentUser);
+
+  useEffect(() => {
+  if (currentUser && !currentUser.isAdmin) {
+    navigate('/');
+  }
+  }, [currentUser]);
 
   return (
     <div>
@@ -138,71 +177,71 @@ const Admin = () => {
           </Table>
           
           <h3>Add New Item</h3>
-<Form>
-<Form.Group>
-  <Form.Label>Item Name</Form.Label>
-  <Form.Control type="text" placeholder="Enter item name" value={newItem.itemName} onChange={(e) => setNewItem({ ...newItem, itemName: e.target.value })} />
-</Form.Group>
-<Form.Group>
-  <Form.Label>Description</Form.Label>
-  <Form.Control type="text" placeholder="Enter description" value={newItem.description} onChange={(e) => setNewItem({ ...newItem, description: e.target.value })} />
-</Form.Group>
-<Form.Group>
-  <Form.Label>Image URL</Form.Label>
-  <Form.Control type="text" placeholder="Enter image URL" value={newItem.imageUrl} onChange={(e) => setNewItem({ ...newItem, imageUrl: e.target.value })} />
-</Form.Group>
-  <Button variant="primary" type="button" onClick={addItem}>
-    Add Item
-  </Button>
-</Form>
+          <Form>
+            <Form.Group>
+              <Form.Label>Item Name</Form.Label>
+              <Form.Control type="text" placeholder="Enter item name" value={newItem.itemName} onChange={(e) => setNewItem({ ...newItem, itemName: e.target.value })} />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Description</Form.Label>
+              <Form.Control type="text" placeholder="Enter description" value={newItem.description} onChange={(e) => setNewItem({ ...newItem, description: e.target.value })} />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Image URL</Form.Label>
+              <Form.Control type="text" placeholder="Enter image URL" value={newItem.imageUrl} onChange={(e) => setNewItem({ ...newItem, imageUrl: e.target.value })} />
+            </Form.Group>
+            <Button variant="primary" type="button" onClick={addItem}>
+              Add Item
+            </Button>
+          </Form>
 
-<Modal show={showModal} onHide={closeModal}>
-  <Modal.Header closeButton>
-    <Modal.Title>Edit Item</Modal.Title>
-  </Modal.Header>
-  <Modal.Body>
-    <Form.Group>
-      <Form.Label>Item Name</Form.Label>
-      <Form.Control
-        type="text"
-        value={editingIndex !== null ? items[editingIndex].itemname : ''}
-        onChange={(e) => {
-          let newItems = [...items];
-          newItems[editingIndex].itemname = e.target.value;
-          setItems(newItems);
-        }}
-      />
-    </Form.Group>
-    <Form.Group>
-      <Form.Label>Description</Form.Label>
-      <Form.Control
-        type="text"
-        value={editingIndex !== null ? items[editingIndex].description : ''}
-        onChange={(e) => {
-          let newItems = [...items];
-          newItems[editingIndex].description = e.target.value;
-          setItems(newItems);
-        }}
-      />
-    </Form.Group>
-    <Form.Group>
-      <Form.Label>Image URL</Form.Label>
-      <Form.Control
-        type="text"
-        value={editingIndex !== null ? items[editingIndex].imageurl : ''}
-        onChange={(e) => {
-          let newItems = [...items];
-          newItems[editingIndex].imageurl = e.target.value;
-          setItems(newItems);
-        }}
-      />
-    </Form.Group>
-  </Modal.Body>
-  <Modal.Footer>
-    <Button variant="secondary" onClick={closeModal}>Close</Button>
-    <Button variant="primary" onClick={handleEditItem}>Save Changes</Button>
-  </Modal.Footer>
-</Modal>
+          <Modal show={showModal} onHide={closeModal}>
+            <Modal.Header closeButton>
+              <Modal.Title>Edit Item</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form.Group>
+                <Form.Label>Item Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={editingIndex !== null ? items[editingIndex].itemname : ''}
+                  onChange={(e) => {
+                    let newItems = [...items];
+                    newItems[editingIndex].itemname = e.target.value;
+                    setItems(newItems);
+                  }}
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Description</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={editingIndex !== null ? items[editingIndex].description : ''}
+                  onChange={(e) => {
+                    let newItems = [...items];
+                    newItems[editingIndex].description = e.target.value;
+                    setItems(newItems);
+                  }}
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Image URL</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={editingIndex !== null ? items[editingIndex].imageurl : ''}
+                  onChange={(e) => {
+                    let newItems = [...items];
+                    newItems[editingIndex].imageurl = e.target.value;
+                    setItems(newItems);
+                  }}
+                />
+              </Form.Group>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={closeModal}>Close</Button>
+              <Button variant="primary" onClick={handleEditItem}>Save Changes</Button>
+            </Modal.Footer>
+          </Modal>
         </>
       )}
     </div>
@@ -210,4 +249,3 @@ const Admin = () => {
 };
 
 export default Admin;
-

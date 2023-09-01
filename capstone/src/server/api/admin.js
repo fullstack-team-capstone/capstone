@@ -2,6 +2,8 @@
 
 const express = require('express');
 const router = express.Router();
+const jws = require('jsonwebtoken');
+
 
 const {
     getAllUsers,
@@ -24,6 +26,34 @@ const {
 } = require('../db');
 
 // Users
+
+router.get('/current-user', async (req, res, next) => {
+    const authHeader = req.headers.authorization;
+
+    if (authHeader) {
+        const token = authHeader.split(' ')[1];
+
+        jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
+            if (err) {
+                return res.sendStatus(403);
+            }
+
+            try {
+                const currentUser = await getUserById(user.id);
+                if (currentUser) {
+                    res.send(currentUser);
+                } else {
+                    res.status(401).send("User not found");
+                }
+            } catch (error) {
+                next(error);
+            }
+        });
+    } else {
+        res.sendStatus(401);
+    }
+});
+
 router.get('/users', async (req, res, next) => {
     try {
         const users = await getAllUsers();
