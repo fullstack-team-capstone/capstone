@@ -1,3 +1,5 @@
+// components/Items.jsx
+
 import React, { useState, useEffect } from 'react';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
@@ -69,7 +71,7 @@ function Items() {
                 <ListGroup.Item>{/* Your rating function here */}</ListGroup.Item> 
               </ListGroup>
               <Card.Body>
-                <Card.Link href="http://localhost:3000/items">View Item</Card.Link>
+              <Link to={`/items/${product.id}`} className="card-link">View Item</Link>
               </Card.Body>
             </Card>
           </Col>

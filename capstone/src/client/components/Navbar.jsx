@@ -1,5 +1,3 @@
-// components/Navbar.jsx
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Logout from './Logout';  // Import the Logout component
@@ -7,7 +5,7 @@ import { useAuth } from '../context/AuthContext';  // Import useAuth
 import '../css/Navbar.css';
 
 const Navbar = () => {
-  const { isLoggedIn } = useAuth();  // Use isLoggedIn from AuthContext
+  const { isLoggedIn, user } = useAuth();  // Use isLoggedIn and user from AuthContext
 
   return (
     <div className='navbar'>
@@ -18,6 +16,7 @@ const Navbar = () => {
         {isLoggedIn ? (
           <>
             <Link to='/items'>Items</Link>
+            {user && user.isAdmin && <Link to='/admin'>Admin</Link>} {/* Show Admin link if user is an admin */}
             <Logout />  {/* Render the Logout component when logged in */}
           </>
         ) : (
