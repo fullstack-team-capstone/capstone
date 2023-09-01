@@ -19,33 +19,7 @@ const AddCommentForm = ({ reviewId, onSave }) => {
     });
   };
 
-  const handleSave = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(
-        'http://localhost:3000/api/comments',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            reviewid: reviewId,
-            ...newComment,
-          }),
-        }
-      );
-
-      if (response.ok) {
-        onSave(newComment);
-    } else {
-        console.log('Failed to add comment');
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  
 
   return (
     <div>

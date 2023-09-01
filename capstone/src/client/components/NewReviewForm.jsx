@@ -24,30 +24,7 @@ const NewReviewForm = ({ productId, onSave }) => {
     }
   };
 
-  const handleSave = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/api/reviews', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          reviewableid: productId,
-          ...newReview,
-        }),
-      });
-
-      if (response.ok) {
-        onSave(newReview);
-      } else {
-        console.log('Failed to add review');
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  
 
   return (
     <div>
@@ -81,7 +58,7 @@ const NewReviewForm = ({ productId, onSave }) => {
         onChange={handleInputChange}
         placeholder="Review Body"
       />
-      <button onClick={handleSave}>Add Review</button>
+      <button onClick={() =>onSave(newReview)}>Add Review</button>
     </div>
   );
 };

@@ -34,16 +34,11 @@ const Singleitem = ({ user }) => {
     }
   }, [user, reviews, product]);
 
-  const handleNewReviewInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewReview({
-      ...newReview,
-      [name]: value,
-    });
-  };
+  
 
-  const handleAddReview = async (e) => {
-    e.preventDefault();
+  const handleAddReview = async (newReview) => {
+    
+    console.log('how many times is handle add review being called')
 
     const token = localStorage.getItem('token');
 
@@ -207,45 +202,7 @@ const Singleitem = ({ user }) => {
 
   }
 
-  const handleAddNewReview = async (newReview) => {
-    try {
-      // Send a POST request to add the new review
-      const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/api/reviews', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          reviewableid: product.id,
-          ...newReview,
-        }),
-      });
-
-      if (response.ok) {
-        
-        const addedReviewData = await response.json();
-        const addedReview = addedReviewData.review;
-
-        
-        setNewlyAddedReviews([...newlyAddedReviews, addedReview]);
-
-        
-
-      } else {
-        console.log('Failed to add review');
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
   
-
-  const handleCancelAddComment = () => {
-    setIsAddingComment(false);
-    setSelectedReviewId(null);
-  }
 
 
 
@@ -395,7 +352,7 @@ const Singleitem = ({ user }) => {
 
           {isAddingReview ? (
             <form onSubmit={handleAddReview}>
-              <NewReviewForm productId={product.id} onSave={(newReview) => handleAddNewReview(newReview)} />
+              <NewReviewForm productId={product.id} onSave={handleAddReview} />
             </form>
           ) : null}
 
