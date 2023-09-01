@@ -25,8 +25,8 @@ function App() {
         <Route path='/login' element={<Login setUser={setUser}/>} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/user' element={<Userpage user={user}/>} />
-        <Route path='/items' element={<Items />} />
-        <Route path='/items/:id' element={<Singleitem />} />
+        <Route path='/items' element={<Items user={user} />} />
+        <Route path='/items/:id' element={<Singleitem user={user} />} />
       </Routes>
     </div>
   );

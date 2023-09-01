@@ -7,7 +7,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Link } from 'react-router-dom';
 
-function Items() {
+function Items({user}) {
+  console.log('is the user here??', user)
 
   const [products, setProducts] = useState([])
   const [reviews, setReviews] = useState([])
@@ -76,7 +77,7 @@ function Items() {
                     <ListGroup.Item>{fetchCalculate(product.id)}</ListGroup.Item> 
                   </ListGroup>
                   <Card.Body>
-                    <Card.Link href="http://localhost:3000/items">View Item</Card.Link>
+                    <Link to = {`/items/${product.id}`} className="card-link">View Item</Link>
                   </Card.Body>
                 </Card>
 
