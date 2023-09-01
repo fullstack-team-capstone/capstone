@@ -20,9 +20,12 @@ const requireAdminOrAuthor = async (req, res, next) => {
   
 // Middleware to require author access
 const requireAuthor = async (req, res, next) => {
-    const reviewId = req.params.reviewId;
-    const review = await getCommentById(reviewId);
-    if (req.user.id === review.userid) {
+    const commentId = req.params.commentid;
+    const comment = await getCommentById(commentId);
+    console.log('req.user.id',req.user.id)
+    console.log('comment', comment)
+
+    if (req.user.id === comment.userid) {
       next();
     } else {
       res.status(403).send({ error: 'You must be the author of this review to perform this action' });
