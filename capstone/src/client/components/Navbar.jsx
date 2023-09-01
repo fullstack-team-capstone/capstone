@@ -17,13 +17,12 @@ const Navbar = () => {
       <div className='navbar-right'>
         {isLoggedIn ? (
           <>
-            <Link to='/items'>Items</Link>
+            <Link to='/user'>Profile</Link>
             <Logout />  {/* Render the Logout component when logged in */}
           </>
         ) : (
           <>
             <Link to='/login'>Login</Link>
-            <Link to='/items'>Items</Link>
           </>
         )}
       </div>

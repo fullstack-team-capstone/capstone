@@ -5,12 +5,15 @@ import { useNavigate } from 'react-router-dom';
 const Logout = () => {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
+  const handleLogout =  () => {
     // Clear the JWT token (assuming it's stored in local storage under the key 'token')
+    
     localStorage.removeItem('token');
 
     // Redirect to home page
-    navigate('/');
+    if (token.length === 0)
+    return (navigate('/'));
+  
   };
 
   return (

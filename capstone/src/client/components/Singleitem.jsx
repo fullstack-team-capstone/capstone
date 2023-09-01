@@ -7,7 +7,8 @@ import Card from 'react-bootstrap/Card';
 import Reviews from './Reviews';  // Import the Reviews component
 import Delete from './Delete';  // Import the Delete component
 
-const Singleitem = () => {
+const Singleitem = ({user}) => {
+  console.log('is the user here??', user)
   const { id } = useParams();
   const [product, setProduct] = useState(null);
 
