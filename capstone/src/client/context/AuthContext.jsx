@@ -1,3 +1,4 @@
+// context/AuthContext.jsx
 
 import React, { createContext, useContext, useState } from "react";
 
@@ -53,6 +54,7 @@ export const AuthProvider = ({ children }) => {
     setUser,
     login,
     logout,
+    isAdmin: user?.isAdmin
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

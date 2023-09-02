@@ -1,14 +1,14 @@
-// components/Home.jsx
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import React from 'react';
-
-const Home = () => {
-  return (
-    <div>
-      <h1>Welcome to the Home Page</h1>
-      <p>This is a placeholder for the home page.</p>
-    </div>
-  );
-};
+function Home() {
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    navigate('/items');
+  }, []);
+  
+  return null;
+}
 
 export default Home;
