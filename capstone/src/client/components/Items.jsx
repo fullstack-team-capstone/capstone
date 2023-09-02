@@ -8,7 +8,6 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Link } from 'react-router-dom';
 
-
 function Items({user}) {
   console.log('is the user here??', user)
   const [products, setProducts] = useState([])

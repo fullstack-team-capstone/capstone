@@ -27,7 +27,6 @@ function App() {
         <Route path='/items' element={<Items />} />
         <Route path='/items/:id' element={<Singleitem />} />
         <Route path='/admin' element={<Admin user={user} />} />
-
       </Routes>
     </div>
   );
