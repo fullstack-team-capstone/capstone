@@ -9,7 +9,9 @@ import EditReviewForm from './EditReview'
 import AddCommentForm from './AddCommentForm';
 import NewReviewForm from './NewReviewForm';
 
-const Singleitem = ({ user }) => {
+const Singleitem = ({user}) => {
+  console.log('is the user here??', user)
+
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [reviews, setReviews] = useState([]);

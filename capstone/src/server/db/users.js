@@ -55,14 +55,14 @@ const getUserByEmail = async(email) => {
 
 const getAllUsers = async () => {
     try {
-        const { rows } = await db.query(`SELECT * FROM users`)
-
-        return rows
-
+        const { rows } = await db.query(`SELECT * FROM users`);
+        console.log("All Users:", rows); // Debugging line
+        return rows;
     } catch (err) {
-        throw err
+        throw err;
     }
 }
+
 
 const deleteUser = async (id) => {
     try {
