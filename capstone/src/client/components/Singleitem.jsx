@@ -204,12 +204,6 @@ const Singleitem = ({user}) => {
 
   }
 
-  
-
-
-
-  
-
   const getReviewsByItemId = () => {
     const reviewsForItem = reviews.filter(review => review.reviewableid === product.id);
     return reviewsForItem.map(review => (

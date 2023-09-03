@@ -50,6 +50,7 @@ const Login = ({setUser}) => {
       navigate("/user");
     } catch (err) {
       console.error(`${err.name}: ${err.message}`);
+      console.log(err)
     }
   };
 

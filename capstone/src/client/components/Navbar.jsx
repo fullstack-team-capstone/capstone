@@ -16,8 +16,6 @@ const Navbar = () => {
         {isLoggedIn ? (
           <>
             <Link to='/user'>Profile</Link>
-            <Link to='/items'>Items</Link>
-
             {/* Check if user exists and is an admin before showing the Admin link */}
             {user && user.isAdmin && <Link to='/admin'>Admin</Link>}
 

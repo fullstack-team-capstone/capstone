@@ -22,6 +22,10 @@ function Items({user}) {
         let response = await fetch('http://localhost:3000/api/items');
         let data = await response.json();
         setProducts(data.items);
+        response = await fetch('http://localhost:3000/api/reviews')
+        data = await response.json()
+        setReviews(data.reviews)
+        console.log(data.reviews)
       } catch (error) {
         console.error(error);
       }
@@ -44,6 +48,33 @@ function Items({user}) {
     );
     setFilteredProducts(filteredProd);
   };
+
+  const getReviewsByReviewableId = (reviewableId) => {
+    try {
+      const reviewsForItem = reviews.filter(review => review.reviewableid === reviewableId)
+      console.log('filtered reviews for item', reviewsForItem)
+      return reviewsForItem
+
+    } catch (error) {
+      console.error (error)
+    }
+  }
+
+  const calculateAverageRating = (reviews) => {
+    if (reviews.length === 0) return "Be the first to review"
+    const total = reviews.reduce ((sum, review) => sum + review.stars, 0)
+    const average = Math.round(total/reviews.length) 
+    console.log('Average', average)
+    return '\u2B50'.repeat(average)
+  }
+
+  const fetchCalculate = (id) => {
+    const reviews = getReviewsByReviewableId(id)
+    const averageRating = calculateAverageRating(reviews)
+    console.log("Type of average rating:", typeof averageRating)
+    console.log(averageRating)
+    return averageRating
+  }
 
   return (
     <Container>
@@ -72,7 +103,7 @@ function Items({user}) {
                 <Card.Title>{product.itemname}</Card.Title>
               </Card.Body>
               <ListGroup className="list-group-flush">
-                <ListGroup.Item>{/* Your rating function here */}</ListGroup.Item> 
+                <ListGroup.Item>{fetchCalculate(product.id)}</ListGroup.Item> 
               </ListGroup>
               <Card.Body>
               <Link to={`/items/${product.id}`} className="card-link">View Item</Link>
