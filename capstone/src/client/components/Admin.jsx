@@ -1,4 +1,4 @@
-// components/Admin.jsx
+//components/Admin.jsx
 
 import React, { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
@@ -68,7 +68,7 @@ const Admin = ({ user }) => {
 
   useEffect(() => {
     if (currentUser !== null) {
-      const isAdmin = currentUser.some(user => user.isAdmin);
+      const isAdmin = currentUser && currentUser.isAdmin
       if (!isAdmin) {
         navigate('/');
       }

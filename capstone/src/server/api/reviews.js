@@ -69,6 +69,7 @@ reviewsRouter.get('/:reviewId', async (req, res, next) => {
 });
 
 reviewsRouter.post('/', requireUser, async (req, res, next) => {
+  console.log(req.body)
     const {reviewableid, title, stars, reviewbody, bottomline} = req.body
     const userid = req.user.id;
     try {

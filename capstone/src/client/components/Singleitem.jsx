@@ -43,14 +43,14 @@ const Singleitem = ({user}) => {
     console.log('how many times is handle add review being called')
 
     const token = localStorage.getItem('token');
-
+    
     try {
       
       if (userHasReviewed) {
         console.log('You have already reviewed this item.');
         return;
       }
-
+      console.log('---', product.id, newReview)
       const response = await fetch('http://localhost:3000/api/reviews', {
         method: 'POST',
         headers: {
@@ -69,6 +69,7 @@ const Singleitem = ({user}) => {
           stars: 0,
           reviewbody: '',
         });
+        console.log(response)
 
         const updatedReviewsResponse = await fetch('http://localhost:3000/api/reviews');
         const updatedReviewsData = await updatedReviewsResponse.json();
