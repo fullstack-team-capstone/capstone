@@ -8,7 +8,6 @@ const NewReviewForm = ({ productId, onSave }) => {
   });
 
   const handleInputChange = (e) => {
-    console.log('how many times is handleinputchange called?')
     const { name, value } = e.target;
 
     if (name === 'stars') {
@@ -24,15 +23,13 @@ const NewReviewForm = ({ productId, onSave }) => {
     }
   };
 
-  
-
   return (
     <div>
       <input
         type="text"
         name="title"
         value={newReview.title}
-        onChange={(e) => setNewReview({ ...newReview, title: e.target.value })}
+        onChange={handleInputChange}
         placeholder="Review Title"
       />
       <div>
@@ -45,7 +42,7 @@ const NewReviewForm = ({ productId, onSave }) => {
               name="stars"
               value={star}
               checked={newReview.stars === star}
-              onChange={(e) => setNewReview({ ...newReview, stars: parseInt(e.target.value, 10) })}
+              onChange={handleInputChange}
             />
             {star}
           </label>
@@ -58,7 +55,7 @@ const NewReviewForm = ({ productId, onSave }) => {
         onChange={handleInputChange}
         placeholder="Review Body"
       />
-      <button onClick={() =>onSave(newReview)}>Add Review</button>
+      <button onClick={() => onSave(newReview)}>Add Review</button>
     </div>
   );
 };

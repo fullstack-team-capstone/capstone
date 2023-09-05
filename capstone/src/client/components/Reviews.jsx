@@ -1,8 +1,11 @@
+// components/Reviews.jsx
 
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext'; // Import the useAuth hook
 
 const Reviews = ({ itemId }) => {
   const [reviews, setReviews] = useState([]);
+  const { user } = useAuth(); // Destructure the user from the AuthContext
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -27,6 +30,8 @@ const Reviews = ({ itemId }) => {
           <p>Rating: {review.stars}</p>
           <p>{review.reviewbody}</p>
           <p>Bottom line: {review.bottomline}</p>
+          {/* Example: Display an edit button only if the user is an admin */}
+          {user && user.isAdmin && <button>Edit</button>}
         </div>
       ))}
     </div>

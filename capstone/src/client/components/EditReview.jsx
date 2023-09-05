@@ -1,6 +1,10 @@
+// components/EditReview.jsx
+
 import React, { useState } from 'react';
+import { useAuth } from '../context/AuthContext'; // Import useAuth
 
 const EditReviewForm = ({ reviewToEdit, onClose, onSave }) => {
+  const { user } = useAuth(); // Use user from AuthContext
   const [editedReview, setEditedReview] = useState({
     title: reviewToEdit.title,
     stars: reviewToEdit.stars,
@@ -26,12 +30,17 @@ const EditReviewForm = ({ reviewToEdit, onClose, onSave }) => {
   };
 
   const handleSave = async () => {
+    if (user?.id !== reviewToEdit.userid && !user?.isAdmin) {
+      console.log("You don't have permission to edit this review.");
+      return;
+    }
+    
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('JWT_SECRET'); // Updated key name to JWT_SECRET
       const response = await fetch(
         `http://localhost:3000/api/reviews/${reviewToEdit.reviewid}`,
         {
-          method: 'PATCH', // Change this to 'PATCH'
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,

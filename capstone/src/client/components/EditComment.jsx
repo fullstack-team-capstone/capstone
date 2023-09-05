@@ -1,6 +1,10 @@
+// components/EditComment.jsx
+
 import React, { useState } from 'react';
+import { useAuth } from '../context/AuthContext';  // Import useAuth
 
 const EditCommentForm = ({ commentToEdit, onClose, onSave, editCommentId }) => {
+  const { user } = useAuth();  // Use user from AuthContext
   const [editedComment, setEditedComment] = useState(commentToEdit.commentBody);
   const [editedTitle, setEditedTitle] = useState(commentToEdit.title);
 
@@ -13,8 +17,13 @@ const EditCommentForm = ({ commentToEdit, onClose, onSave, editCommentId }) => {
   };
 
   const handleSave = async () => {
+    if (user?.id !== commentToEdit.userid && !user?.isAdmin) {
+      console.log("You don't have permission to edit this comment.");
+      return;
+    }
+
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('JWT_SECRET');  // Updated key name to JWT_SECRET
       const response = await fetch(
         `http://localhost:3000/api/comments/${commentToEdit.commentid}`,
         {

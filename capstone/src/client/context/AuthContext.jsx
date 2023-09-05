@@ -1,6 +1,5 @@
-// context/AuthContext.jsx
-
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import axios from 'axios';
 
 export const AuthContext = createContext();
 
@@ -9,43 +8,48 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  console.log("AuthProvider invoked");
-
-  // Initialize from local storage
-  const storedIsLoggedIn = localStorage.getItem("isLoggedIn");
-  const storedUser = localStorage.getItem("user");
-
-  console.log("IsLoggedIn:", storedIsLoggedIn);
-  console.log("Stored User:", storedUser);
-
-  // Safely parse stored user
-  let parsedUser = {};
-
-  if (storedUser && storedUser !== "undefined") {
-    try {
-      parsedUser = JSON.parse(storedUser);
-    } catch (error) {
-      console.error("Failed to parse stored user:", error);
-    }
-  } else {
-    console.warn("Stored user is undefined or not present.");
-  }
-
-  const [isLoggedIn, setIsLoggedIn] = useState(storedIsLoggedIn === "true");
-  const [user, setUser] = useState(parsedUser);
-
-  console.log("User state:", user);
+  const [user, setUser] = useState(null);
+  const initialToken = localStorage.getItem('JWT_SECRET');
+  const [isLoggedIn, setIsLoggedIn] = useState(Boolean(initialToken));
 
   const login = (token) => {
-    localStorage.setItem("token", token);
-    setIsLoggedIn(true);
+    localStorage.setItem('JWT_SECRET', token);
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('JWT_SECRET');
     setIsLoggedIn(false);
+    setUser(null);
   };
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = localStorage.getItem('JWT_SECRET');
+
+      if (!token) {
+        return;
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      try {
+        const response = await axios.get('http://localhost:3000/api/admin/current-user', config);
+        setUser(response.data);
+        setIsLoggedIn(true);
+      } catch (error) {
+        console.error('Failed to fetch current user:', error);
+        setIsLoggedIn(false);
+        setUser(null);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   const value = {
     isLoggedIn,
@@ -54,7 +58,7 @@ export const AuthProvider = ({ children }) => {
     setUser,
     login,
     logout,
-    isAdmin: user?.isAdmin
+    isAdmin: user?.isAdmin,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

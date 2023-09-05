@@ -8,6 +8,7 @@ const Logout = () => {
 
   const handleLogout = () => {
     logout();  // Call the logout function from AuthContext
+    localStorage.removeItem('user');  // Remove user data from local storage
     navigate('/');  // Redirect to home page
   };
 

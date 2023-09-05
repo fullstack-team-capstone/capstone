@@ -1,17 +1,16 @@
 // components/Login.jsx
 
-
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext"; // Import useAuth
+import { useAuth } from "../context/AuthContext"; 
 
-const Login = ({setUser}) => {
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
-  const { login } = useAuth(); // Use login function from AuthContext
+  const { login, setUser } = useAuth();
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -38,19 +37,15 @@ const Login = ({setUser}) => {
       if (!response.ok) {
         throw result;
       }
-
-      // Assuming result.user contains user details
-      localStorage.setItem("user", JSON.stringify(result.user));
-      login(result.token); // Use login function from AuthContext
+      
+      localStorage.setItem("JWT_SECRET", result.token);
+      login(result.token);
       setEmail("");
       setPassword("");
-      console.log('result', result)
-      console.log('user: ', result.user)
-      setUser(result.user)
+      setUser(result.user);
       navigate("/user");
     } catch (err) {
       console.error(`${err.name}: ${err.message}`);
-      console.log(err)
     }
   };
 

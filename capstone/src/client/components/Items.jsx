@@ -7,9 +7,11 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext'; // Added useAuth import
 
-function Items({user}) {
-  console.log('is the user here??', user)
+function Items() {
+  const { user } = useAuth(); // Fetch user from AuthContext
+  console.log('is the user here??', user);
   const [products, setProducts] = useState([])
   const [reviews, setReviews] = useState([])
   const [searchQuery, setSearchQuery] = useState('');

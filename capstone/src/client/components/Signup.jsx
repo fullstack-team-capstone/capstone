@@ -1,6 +1,6 @@
-// components/Signup.jsx
-
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // import useNavigate for routing
+import { useAuth } from '../context/AuthContext'; // Import the useAuth hook
 
 const Signup = () => {
   const [username, setUsername] = useState('');
@@ -8,6 +8,8 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate(); // initialize useNavigate
+  const { signup } = useAuth(); // Use signup function from AuthContext
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -25,41 +27,28 @@ const Signup = () => {
     setPasswordConfirmation(e.target.value);
   };
 
-  const signup = async () => {
+  const signupFunction = async () => {
     try {
-        if (password !== passwordConfirmation) {
-            setMessage('Passwords do not match.');
-            return;
-        }
-        const response = await fetch('http://localhost:3000/api/users/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type' : 'application/json'
-            },
-            body: JSON.stringify({
-                username,
-                email,
-                password
-            })
-        });
-        const result = await response.json();
-        setMessage(result.message);
-        if (!response.ok) {
-            throw(result);
-        }
-        setUsername('');
-        setEmail('');
-        setPassword('');
-        setPasswordConfirmation('');
+      if (password !== passwordConfirmation) {
+        setMessage('Passwords do not match.');
+        return;
+      }
+      const result = await signup(username, email, password); // Use signup from AuthContext
+      setMessage(result.message);
+      setUsername('');
+      setEmail('');
+      setPassword('');
+      setPasswordConfirmation('');
+      navigate('/login'); // navigate to login page
     } catch (err) {
-        console.error(`${err.name}: ${err.message}`);
-        console.log(err)
+      console.error(`${err.name}: ${err.message}`);
+      setMessage(err.message);
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    signup();
+    signupFunction();
   };
 
   return (
@@ -114,3 +103,4 @@ const Signup = () => {
 };
 
 export default Signup;
+

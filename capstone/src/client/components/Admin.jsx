@@ -1,5 +1,3 @@
-// components/Admin.jsx
-
 import React, { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
@@ -7,11 +5,12 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';  // Import useAuth
 
-const Admin = ({ user }) => {
-  console.log('is the user here??', user)
+const Admin = () => {
+  const { user } = useAuth();  // Use user from AuthContext
+  console.log('is the user here??', user);
   const navigate = useNavigate();
-  const [currentUser, setCurrentUser] = useState(null);
   const [users, setUsers] = useState([]);
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState({
@@ -26,21 +25,6 @@ const Admin = ({ user }) => {
   const [editingIndex, setEditingIndex] = useState(null);
 
   useEffect(() => {
-    const fetchCurrentUser = async () => {
-      try {
-        const token = localStorage.getItem("JWT_SECRET");  // Using JWT_SECRET as the key
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        };
-        const response = await axios.get('http://localhost:3000/api/admin/current-user', config);
-        setCurrentUser(response.data);
-      } catch (error) {
-        console.error('Failed to fetch current user:', error);
-      }
-    };
-
     const fetchUsers = async () => {
       try {
         const response = await axios.get('http://localhost:3000/api/admin/users');
@@ -61,20 +45,15 @@ const Admin = ({ user }) => {
       }
     };
 
-    fetchCurrentUser();
     fetchUsers();
     fetchItems();
   }, []);
 
   useEffect(() => {
-    if (currentUser !== null) {
-      const isAdmin = currentUser.some(user => user.isAdmin);
-      if (!isAdmin) {
-        navigate('/');
-      }
+    if (user && !user.isAdmin) {
+      navigate('/');
     }
-  }, [currentUser, navigate]);
-
+  }, [user]);
 
   const addItem = async () => {
     try {
