@@ -134,7 +134,7 @@ const Admin = ({ user }) => {
       {isLoading ? (
         <p>Loading...</p>
       ) : (
-        <>
+        <div>
           <Table striped bordered hover>
             <thead>
               <tr>
@@ -243,7 +243,7 @@ const Admin = ({ user }) => {
               <Button variant="primary" onClick={handleEditItem}>Save Changes</Button>
             </Modal.Footer>
           </Modal>
-        </>
+        </div>
       )}
     </div>
   );

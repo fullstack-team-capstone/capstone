@@ -331,7 +331,7 @@ const Singleitem = ({user}) => {
   return (
     <div>
       {product ? (
-        <>
+        <div>
           <Card style={{ width: '18rem' }}>
             <Card.Img variant="top" src={product.imageurl} />
             <Card.Body>
@@ -363,7 +363,7 @@ const Singleitem = ({user}) => {
           ))}
 
 
-        </>
+        </div>
       ) : (
         <p>Loading...</p>
       )}
