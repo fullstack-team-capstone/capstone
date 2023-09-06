@@ -1,24 +1,49 @@
 /* Items.css */
-.equal-card {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-.fixed-card-body {
-    height: 60px;
-    overflow: hidden;
-}
-
-.col-md-3 {
-    flex: 0 0 calc(25% - 1rem);
-    max-width: calc(25% - 1rem);
-}
 
 .row-spacing {
     margin-bottom: 2rem;
-}
-
-.item-card {
-  border: none;
-}
+  }
+  
+  /* Set the card dimensions */
+  .card {
+    width: 100%;
+    flex-direction: row; /* Make the card layout horizontal */
+  }
+  
+  /* Set the image dimensions */
+  .card img {
+    max-width: 200px;
+    object-fit: cover;
+  }
+  
+  /* Set the card body to have a flexible height */
+  .card-body {
+    flex: 1;
+  }
+  
+  /* Set the ListGroup to have a fixed height */
+  .list-group-flush {
+    flex: 0 0 100px;
+  }
+  
+  /* Search dropdown styling */
+  .search-dropdown {
+    position: absolute;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    z-index: 10;
+  }
+  
+  .search-dropdown p {
+    margin: 0;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+  }
+  
+  .search-dropdown p:hover {
+    background-color: #f1f1f1;
+  }
+  

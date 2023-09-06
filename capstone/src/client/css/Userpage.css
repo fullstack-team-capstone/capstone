@@ -1,0 +1,72 @@
+/* Userpage Container */
+.userpage-container {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* User Greeting */
+  .user-greeting {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  /* User Content Container */
+  .user-content {
+    width: 100%;
+    max-width: 800px;
+  }
+  
+  /* User Section Title */
+  .user-section-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  
+  /* User Empty Message */
+  .user-empty-message {
+    font-size: 18px;
+    color: #777;
+  }
+  
+  /* Individual Card Style */
+  .Card {
+    margin: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    width: calc(25% - 20px);
+  }
+  
+  /* Search Box */
+  input[type="text"] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 20px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  
+  input[type="text"]:focus {
+    border-color: #007bff;
+  }
+  
+  /* Search Dropdown */
+  .search-dropdown {
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  

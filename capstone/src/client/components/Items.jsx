@@ -7,6 +7,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Link } from 'react-router-dom';
+import '../css/Items.css';
 
 function Items({user}) {
   console.log('is the user here??', user)
@@ -94,9 +95,8 @@ function Items({user}) {
         </div>
       )}
       <Row className="row-spacing">
-
         {products.map((product) => (
-          <Col key={product.id}>
+          <Col key={product.id} xs={12} sm={6} md={4} lg={3}>
             <Card style={{ width: '18rem' }}>
               <Card.Img variant="top" src={product.imageurl} />
               <Card.Body>
@@ -106,12 +106,11 @@ function Items({user}) {
                 <ListGroup.Item>{fetchCalculate(product.id)}</ListGroup.Item> 
               </ListGroup>
               <Card.Body>
-              <Link to={`/items/${product.id}`} className="card-link">View Item</Link>
+                <Link to={`/items/${product.id}`} className="card-link">View Item</Link>
               </Card.Body>
             </Card>
           </Col>
         ))}
-
       </Row>
     </Container>
   );

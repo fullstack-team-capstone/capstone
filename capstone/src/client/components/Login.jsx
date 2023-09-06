@@ -1,9 +1,7 @@
-// components/Login.jsx
-
-
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext"; // Import useAuth
+import '../css/Login.css';
 
 const Login = ({setUser}) => {
   const [email, setEmail] = useState("");
@@ -38,19 +36,14 @@ const Login = ({setUser}) => {
       if (!response.ok) {
         throw result;
       }
-
-      // Assuming result.user contains user details
       localStorage.setItem("user", JSON.stringify(result.user));
-      login(result.token); // Use login function from AuthContext
+      login(result.token);
       setEmail("");
       setPassword("");
-      console.log('result', result)
-      console.log('user: ', result.user)
-      setUser(result.user)
+      setUser(result.user);
       navigate("/user");
     } catch (err) {
       console.error(`${err.name}: ${err.message}`);
-      console.log(err)
     }
   };
 
@@ -60,10 +53,11 @@ const Login = ({setUser}) => {
   };
 
   return (
-    <div>
+    <div className="login-container">
+      <div className="login-background"></div>
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className="field-wrapper">  {/* Added class */}
           <label htmlFor="email">Email:</label>
           <input
             type="email"
@@ -73,7 +67,7 @@ const Login = ({setUser}) => {
             required
           />
         </div>
-        <div>
+        <div className="field-wrapper">  {/* Added class */}
           <label htmlFor="password">Password:</label>
           <input
             type="password"

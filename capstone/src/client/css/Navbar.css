@@ -1,22 +1,53 @@
-/* Navbar.css */
+/* Navbar container */
 
+/* Navbar container */
 .navbar {
   display: flex;
   justify-content: space-between;
-  align-items: center;  /* Vertically align items */
-  background-color: #333;
-  color: white;
+  align-items: center;
+  width: 100%;  /* Full width */
+  height: 60px;  /* Fixed height */
   padding: 1em;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: linear-gradient(45deg, #3f87a6, #ebf8e1, #f69d3c);
+  background-size: 600% 400%;
+  animation: gradient 15s ease infinite;
 }
 
+/* Animation for background gradient */
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+
+/* Links */
 .navbar a {
   color: white;
   text-decoration: none;
-  margin-right: 10px;  
+  margin: 0 15px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
 }
 
+/* Hover effect for links */
+.navbar a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Left and right sections */
 .navbar-left, .navbar-right {
   display: flex;
-  align-items: center;  /* Vertically align items */
+  align-items: center;
   gap: 1em;
 }
